@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import type { WallDef } from './walls';
+import type { RoomEditSession } from './edits';
 
 export type V3 = [number, number, number];
 
@@ -45,6 +46,8 @@ export interface BuiltRoom {
    * bodies; without it they stay separate objects (safe after building physics colliders).
    */
   optimize?(opts?: { static?: boolean }): { meshesBefore: number; meshesAfter: number; batches: number } | void;
+  /** removable / movable parts and the user's saved edits (the viewer's Edit mode) */
+  edit?: RoomEditSession;
   /** posed reference photos (House Capture bundles), in room coordinates */
   photos?: PhotoPose[];
 }

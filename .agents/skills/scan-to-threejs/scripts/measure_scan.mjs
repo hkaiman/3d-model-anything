@@ -9,10 +9,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
+import { pathToFileURL } from 'node:url';
 
 const require = createRequire(path.join(process.cwd(), 'package.json'));
-const { NodeIO } = await import(require.resolve('@gltf-transform/core'));
-const { vec3 } = await import(require.resolve('gl-matrix'));
+const { NodeIO } = await import(pathToFileURL(require.resolve('@gltf-transform/core')).href);
+const { vec3 } = await import(pathToFileURL(require.resolve('gl-matrix')).href);
 
 const args = process.argv.slice(2);
 const file = args.find((a) => !a.startsWith('--'));
@@ -89,7 +90,7 @@ console.log('SCAN_OFFSET = (-centerX, -floorY, -centerZ). Ceiling height = ceili
 
 // --- 3. optional top-down images ------------------------------------------------
 if (outDir) {
-  const { PNG } = await import(require.resolve('pngjs'));
+  const { PNG } = await import(pathToFileURL(require.resolve('pngjs')).href);
   let minX = Infinity, maxX = -Infinity, minZ = Infinity, maxZ = -Infinity;
   for (const t of tris) for (const v of [t.a, t.b, t.c]) {
     minX = Math.min(minX, v[0]); maxX = Math.max(maxX, v[0]); minZ = Math.min(minZ, v[2]); maxZ = Math.max(maxZ, v[2]);

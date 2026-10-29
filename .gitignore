@@ -15,3 +15,9 @@ data/scans/
 apps/house-capture/release/screenshots/
 
 HouseCapture.xcodeproj/
+
+# personal Bengkel capture (keep private)
+data/demos/bengkel.json
+data/web-assets/bengkel/
+data/demos/f1-raw.json
+data/web-assets/f1/

@@ -100,3 +100,16 @@ body.layout-mode .quality-section, body.knolling-mode .quality-section { display
 #camera-copy-status { display: block; font-size: 11px; margin-top: 5px; }
 
 
+
+.edit-toggle { width: 100%; border-color: #c2d7a94d; color: #dce9cf; background: #c2d7a90f; }
+.edit-toggle[aria-pressed=true] { background: #c2d7a933; }
+#edit-tools { display: grid; gap: 8px; margin-top: 10px; }
+.camera-grid.two { grid-template-columns: 1fr 1fr; }
+#edit-tools .camera-grid button { border: 1px solid #ffffff12; color: #b7c2ba; font-size: 11px; }
+#edit-tools .camera-grid button.active { background: #c2d7a91a; border-color: #c2d7a94d; color: #dce9cf; }
+.edit-selection { margin: 2px 0; font-size: 11px; line-height: 1.5; color: #c9d4cc; word-break: break-word; }
+.wall-options { display: grid; gap: 6px; font-size: 11px; color: #8d9c92; }
+.wall-options label { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.wall-options input { width: 86px; padding: 5px; border: 1px solid #ffffff26; border-radius: 5px; background: #ffffff08; color: #e3e8e5; font: inherit; }
+.wall-options input[type=color] { padding: 1px; height: 28px; }
+#edit-status { margin: 2px; min-height: 1.5em; }

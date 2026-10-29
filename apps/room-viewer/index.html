@@ -37,6 +37,35 @@
             <button data-source="wireframe" aria-pressed="false">Wireframe</button>
           </div>
         </section>
+        <section class="control-section" id="edit-section" hidden>
+          <h2>Edit <span class="section-note">Changes save in this browser</span></h2>
+          <button id="edit-toggle" class="edit-toggle" aria-pressed="false">Edit this room</button>
+          <div id="edit-tools" hidden>
+            <div class="camera-grid two">
+              <button data-tool="select" class="active" aria-pressed="true">Select / move</button>
+              <button data-tool="wall" aria-pressed="false">Add wall</button>
+            </div>
+            <p id="edit-selection" class="edit-selection">Click an item to select it.</p>
+            <div class="camera-grid two">
+              <button id="edit-rotate" disabled>Rotate (R)</button>
+              <button id="edit-delete" disabled>Delete (Del)</button>
+            </div>
+            <div id="wall-options" class="wall-options" hidden>
+              <label>Height (m) <input id="wall-height" type="number" min="0.5" max="6" step="0.05" value="2.7"></label>
+              <label>Thickness (m) <input id="wall-thickness" type="number" min="0.02" max="0.6" step="0.01" value="0.1"></label>
+              <label>Color <input id="wall-color" type="color" value="#f1e7da"></label>
+            </div>
+            <div class="camera-grid two">
+              <button id="edit-undo">Undo (Ctrl+Z)</button>
+              <button id="edit-reset">Reset edits</button>
+            </div>
+            <div class="camera-grid two">
+              <button id="edit-copy">Copy edits</button>
+              <button id="edit-glb">Download .glb</button>
+            </div>
+            <p id="edit-status" class="help" role="status"></p>
+          </div>
+        </section>
         <section class="control-section" id="navigation" aria-label="Camera views">
           <h2>Camera</h2>
           <div class="camera-grid">

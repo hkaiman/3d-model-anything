@@ -3,6 +3,7 @@ import { collectInventory, showKnolling, stopKnolling } from './knolling';
 import { showLayout } from './layout';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { initEditor } from './editor';
 import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
 import { ROOMS, roomById, type BuiltRoom } from '../../../demos/index';
 import type { RoomModule } from '../../../packages/room-runtime/types';
@@ -98,7 +99,7 @@ for (const r of ROOMS) {
   const b = document.createElement('button');
   b.textContent = r.label;
   b.dataset.room = r.id;
-  b.addEventListener('click', () => loadRoom(r.id));
+  b.addEventListener('click', () => { if (r.id !== roomId) editing = false; void loadRoom(r.id); });
   roomSelect.append(b);
 }
 
@@ -107,6 +108,8 @@ let room: BuiltRoom | undefined;
 let roomId = '';
 let activeRoomId = '';
 let roomRequest = 0;
+let editing = false;
+let editorApi: ReturnType<typeof initEditor> | undefined;
 const statusEl = document.querySelector<HTMLOutputElement>('#viewer-status')!;
 const layoutHost = document.querySelector<HTMLElement>('#layout')!;
 const knollingHost = document.querySelector<HTMLElement>('#knolling')!;
@@ -197,7 +200,7 @@ async function loadRoom(id: string, updated?: RoomModule) {
   if (room?.referenceAvailable === false && (source === 'scan' || source === 'overlay')) source = 'model';
   orbit.maxDistance = mod.id === 'house' ? 80 : 30;
   collectInventory(room);
-  room.optimize?.({ static: true });
+  if (!editing) room.optimize?.({ static: true }); // merged meshes can't be picked one by one
   if (mode !== 'layout' && mode !== 'knolling' && !['layout', 'knolling'].includes(new URLSearchParams(location.search).get('view') ?? '')) await prepareRendering();
   if (request !== roomRequest) { releaseReplaced(); return; }
 
@@ -211,6 +214,7 @@ async function loadRoom(id: string, updated?: RoomModule) {
   orbit.update();
   activate('room', mod.id);
   statusEl.textContent = mod.label;
+  editorApi?.roomChanged(mod.id);
   const url = new URL(location.href);
   if (url.searchParams.get('room') !== mod.id) url.searchParams.delete('camera');
   url.searchParams.set('room', mod.id);
@@ -657,6 +661,14 @@ if (import.meta.hot) {
     if (next) void loadRoom(roomId, next.roomById(roomId));
   });
 }
+
+editorApi = initEditor({
+  viewport, canvas, camera, orbit, scene,
+  getRoom: () => room,
+  canEdit: () => mode === 'orbit' && source === 'model' && !preparing,
+  invalidate,
+  rebuild: async (on) => { editing = on; await loadRoom(roomId, roomById(roomId)); },
+});
 
 await loadRoom(new URLSearchParams(location.search).get('room') ?? ROOMS[0].id);
 
